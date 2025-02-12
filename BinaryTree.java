@@ -1,6 +1,6 @@
 
 /*
- * *** PLACE YOUR NAME / SECTION HERE ***
+ * *** Julian Casalez/ 272-001***
  *
  * Homework # 2 (Programming Assignment). This Java class defines a few basic
  * manipulation operations of a binary trees.
@@ -9,8 +9,8 @@
  *
  */
 
-import java.util.Queue;
 import java.util.LinkedList;
+import java.util.Queue;
 
 /*
  * Class BinaryTree
@@ -225,6 +225,25 @@ public class BinaryTree {
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
 
+
+        /*This first chunk of code checks to see if the  left leaf is null
+         * If it is not null, then it will recursively call the replaceValueHelper method
+        */
+        if (node.left != null) {
+            replaceValueHelper(node.left, oldVal, newVal);
+
+        /*This second chunk of code checks to see if the right leaf is null
+         * then it will recursively call the replaceValueHelper method
+        */
+            if ( node.right != null) {
+                replaceValueHelper(node.right, oldVal, newVal);
+            }
+        }
+
+        //This determines whether or not it is less than the old value; if yes replaces
+        if (node.data == oldVal) {
+            node.data = newVal;
+        }
     }
 
 
@@ -247,7 +266,20 @@ public class BinaryTree {
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
 
-        return Integer.MAX_VALUE;
+        //Checks to see if the node is null, if so it will return the totalMin
+        if (node == null) {
+           int totalMin = Integer.MAX_VALUE;
+            return totalMin;
+        }
+    
+        // Recursively find the minimum in the left and right subtrees
+       int leftMin = findMinHelper(node.left);
+       int rightMin = findMinHelper(node.right);
+    
+        // Uses the min method to find the minimum of the three values
+       int totalMin = Math.min(node.data, Math.min(leftMin, rightMin));
+
+        return totalMin;
     }
 
 
@@ -269,10 +301,27 @@ public class BinaryTree {
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
 
-        // RETURNING -1 IN THIS STUB, WHICH WILL FAIL ALL TESTS. REPLACE IT WITH YOUR CODE
+        // return -1; // RECALL, IF TREE IS EMPTY, RETURN -1
+
+        //Initializes the count each time the method is called
+        int GTCount = 0;
+
+        //If the node is null, then it will return the GTCount
+        if (node == null) {
+            return GTCount;
+        }
+
+        //Otherwise it checks to see if it is greater than the current value and increments if true
+        if(node.data > val) {
+            GTCount++;
+        }
+
+        //It then recursively calls the method for the left and right leaf
+       GTCount += nodesGTHelper(node.left, val);
+        GTCount += nodesGTHelper(node.right, val);
 
 
-        return -1;
+        return GTCount;
     }
 
 
@@ -311,6 +360,24 @@ public class BinaryTree {
         // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
         // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
 
-        return new int[]{0, 0};
+        //creates two variables to use in the rest of the method
+        int sum = 0;
+        int count = 0;
+
+        //Checks to see if the node is not null, if so it will return the sum and count
+        if (n != null) {
+
+            //It then creates new arrays using recursive calls to the left and right leaf
+            int[] left = averageHelper(n.left);
+            int[] right = averageHelper(n.right);
+
+            //Finally it adds up the appropriate values to the final sum and count indexes
+            sum = left[0] + right[0] + n.data;
+            count = left[1] + right[1] + 1;
+
+            return new int[]{sum, count};
+        }
+
+        return new int[]{sum, count};
     }
 }
